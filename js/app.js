@@ -93,7 +93,7 @@
 
     function openAuth(mode){ // mode: 'signin' | 'signup'
       toggleModal('authModal', true);
-      $('#authTitle').textContent = mode==='signin'? 'Welcome back' : 'Create your free account';
+      $('#authTitle').textContent = mode==='signin'? 'Welcome back' : 'Start creating games with a free account';
       $('#authConfirm').dataset.mode = mode;
       $('#authPassword').value=''; $('#authUsername').value='';
     }
@@ -236,7 +236,7 @@
       const user = getCurrentUser();
       if(!user){ toggleModal('requireModal', true); return; }
       const title = $('#gameTitle').value.trim() || 'Untitled Game';
-      const description = $('#gameDesc').value.trim() || 'Create your play with BashGames';
+      const description = $('#gameDesc').value.trim() || 'Turn your ideas into play';
       // The last code used in studio is kept in window.__studioCode.
       const code = window.__studioCode || GAME_TEMPLATES.blank;
       const games = getGames();
