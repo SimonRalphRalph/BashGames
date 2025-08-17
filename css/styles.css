@@ -1,140 +1,362 @@
-/* =============================================
-       Minimal, clean, modern UI (ChatGPT + YouTube)
-       Single-file app: no external dependencies.
-       All data is stored in localStorage.
-       ============================================= */
+/* =========================================================
+   GameStudio — OpenAI-inspired theme
+   - Inter/system font stack
+   - Neutral, matte surfaces (minimal gradients)
+   - Subtle borders + soft shadows
+   - OpenAI green accent (#14A37F)
+   - High-contrast focus states, reduced motion aware
+   ========================================================= */
 
-    :root{
-      --bg:#0f1117;           /* page background */
-      --panel:#151823;        /* surfaces */
-      --panel-2:#0c0e14;      /* deeper panels */
-      --muted:#9aa4b2;        /* muted text */
-      --text:#e6e8ee;         /* primary text */
-      --brand:#7c5cff;        /* action color */
-      --brand-2:#00e0b8;      /* accent */
-      --danger:#ff5d5d;       /* errors */
-      --ok:#2ad67b;           /* success */
-      --card:#131726;         /* card bg */
-      --stroke:#22273b;       /* borders */
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:14px;
-    }
+:root{
+  /* Core palette (dark) */
+  --bg: #0B0C0E;           /* app background */
+  --surface: #0E0F12;      /* top-level surfaces (header) */
+  --panel: #111216;        /* cards / panels */
+  --panel-2: #0B0C0D;      /* deeper panels / canvas wrap */
+  --card: #0F1114;         /* inner card */
+  --text: #ECEDEE;         /* primary text */
+  --muted: #9AA0A6;        /* secondary text */
+  --stroke: rgba(255,255,255,0.09);  /* borders */
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 600px at 70% -10%, #1c2040 0%, rgba(28,32,64,0) 55%), var(--bg);
-      color:var(--text);
-    }
+  /* Brand accents (OpenAI-ish green) */
+  --brand: #14A37F;
+  --brand-2: #2BB891;
 
-    a{color:inherit; text-decoration:none}
-    button{cursor:pointer}
+  /* State colors */
+  --danger: #FF5D5D;
+  --ok: #2AD67B;
 
-    /* Top Nav */
-    header.nav{
-      position:sticky; top:0; z-index:30;
-      background: linear-gradient(180deg, rgba(12,14,20,.95) 0%, rgba(12,14,20,.85) 100%);
-      backdrop-filter: saturate(140%) blur(10px);
-      border-bottom:1px solid var(--stroke);
-    }
-    .nav-inner{display:flex; align-items:center; gap:14px; padding:12px clamp(12px,3vw,24px);} 
-    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px}
-    .brand .logo{
-      width:34px;height:34px; border-radius:10px; display:grid; place-items:center;
-      background: linear-gradient(135deg, var(--brand) 0%, #3a8bff 100%);
-      box-shadow:var(--shadow)
-    }
-    .brand .logo svg{filter:drop-shadow(0 6px 18px rgba(124,92,255,.45))}
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,0.02) inset;
 
-    /* Center search */
-    .search-wrap{flex:1; display:flex; justify-content:center}
-    .search{
-      width:min(680px, 92%);
-      display:flex; align-items:center; gap:10px;
-      background:var(--panel);
-      border:1px solid var(--stroke);
-      border-radius: 999px;
-      padding:10px 14px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
-    }
-    .search input{flex:1; background:transparent; border:0; color:var(--text); outline:none; font-size:15px}
+  /* Typography scale */
+  --fs-1: clamp(14px, 1.4vw, 15px);
+  --fs-2: clamp(16px, 1.6vw, 17px);
+  --fs-3: clamp(18px, 1.8vw, 19px);
+  --fs-4: clamp(20px, 2vw, 22px);
+}
 
-    .nav-cta{margin-left:auto; display:flex; gap:8px}
-    .btn{background:var(--panel); border:1px solid var(--stroke); color:var(--text); padding:10px 14px; border-radius:10px; font-weight:600}
-    .btn.brand{background:linear-gradient(135deg, var(--brand), #4f46e5); border-color:transparent}
-    .btn.ghost{background:transparent; border:1px solid var(--stroke)}
+/* Optional light mode scaffold (activate by adding data-theme="light" on <html>) */
+html[data-theme="light"]{
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --panel: #F7F8F8;
+  --panel-2: #FFFFFF;
+  --card: #FFFFFF;
+  --text: #0C0D0E;
+  --muted: #5C6269;
+  --stroke: rgba(0,0,0,0.08);
+}
 
-    /* Layout */
-    .layout{display:grid; grid-template-columns: 260px 1fr; gap:18px; padding:18px; max-width:1400px; margin-inline:auto}
-    .sidebar{background:var(--panel); border:1px solid var(--stroke); border-radius:var(--radius); padding:12px; position:sticky; top:78px; height:calc(100vh - 96px); overflow:auto}
-    .sidebar h3{margin:10px; margin-top:6px; font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--muted)}
-    .subs-list{display:flex; flex-direction:column; gap:6px; padding:6px}
-    .sub-item{display:flex; align-items:center; gap:10px; padding:8px; border-radius:10px; transition:background .2s}
-    .sub-item:hover{background:var(--panel-2)}
-    .avatar{width:28px;height:28px;border-radius:50%; background:linear-gradient(135deg,#3a8bff,#00e0b8)}
+/* Base */
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji";
+  line-height:1.45;
+  color: var(--text);
+  background:
+    radial-gradient(800px 400px at 70% -10%, rgba(32, 40, 48, .26) 0%, rgba(32, 40, 48, 0) 55%),
+    conic-gradient(from 180deg at 50% -20%, rgba(255,255,255,.06), rgba(255,255,255,0)),
+    var(--bg);
+}
 
-    .content{min-height:60vh}
+/* Respect user motion preference */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
 
-    /* Chat-style prompt */
-    .studio{background:var(--panel); border:1px solid var(--stroke); border-radius:var(--radius); padding:18px; display:grid; grid-template-columns:1fr; gap:14px}
-    .prompt-wrap{display:flex; align-items:flex-start; gap:10px; background:var(--card); border:1px solid var(--stroke); padding:12px; border-radius:14px}
-    .prompt-wrap textarea{flex:1; min-height:64px; max-height:200px; width:100%; resize:vertical; background:transparent; border:0; color:var(--text); outline:none; font-size:16px}
-    .prompt-actions{display:flex; flex-wrap:wrap; gap:8px}
+a{ color: inherit; text-decoration: none; }
+button{ cursor: pointer; font: inherit; }
 
-    .canvas-wrap{display:grid; grid-template-columns: 1fr 380px; gap:14px}
-    .play-area{background:var(--panel-2); border:1px solid var(--stroke); border-radius:14px; padding:14px; display:grid; place-items:center}
-    .play-area canvas{background:#06070d; border-radius:10px; width:100%; height:auto; aspect-ratio: 16 / 10}
-    .game-meta{background:var(--panel-2); border:1px solid var(--stroke); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:10px}
-    .field{display:flex; flex-direction:column; gap:6px}
-    .field input,.field textarea, .field select{background:var(--panel); border:1px solid var(--stroke); color:var(--text); padding:10px 12px; border-radius:10px; outline:none}
+/* Focus states (keyboard-visible) */
+:where(a,button,input,textarea,select):focus-visible{
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
 
-    /* Grids */
-    .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:14px}
-    .card{background:var(--panel); border:1px solid var(--stroke); border-radius:14px; overflow:hidden; display:flex; flex-direction:column}
-    .thumb{position:relative; background: #0e1220; height:130px; display:grid; place-items:center}
-    .thumb .pill{position:absolute; top:8px; left:8px; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.08); color:#fff; font-size:12px; padding:4px 8px; border-radius:999px}
-    .thumb img{width:100%; height:100%; object-fit:cover}
-    .card .info{padding:10px; display:grid; gap:8px}
-    .mini{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px}
-    .like-chip{display:inline-flex; align-items:center; gap:6px}
+/* ---------------------------------
+   Header / Top Nav
+   --------------------------------- */
+header.nav{
+  position: sticky; top: 0; z-index: 30;
+  background: color-mix(in oklab, var(--surface) 94%, transparent);
+  backdrop-filter: saturate(130%) blur(8px);
+  border-bottom: 1px solid var(--stroke);
+}
 
-    .section-title{display:flex; align-items:center; justify-content:space-between; margin:16px 0 10px}
-    .section-title h2{font-size:18px; margin:0}
+.nav-inner{
+  display:flex; align-items:center; gap:12px;
+  padding: 10px clamp(12px,3vw,20px);
+}
 
-    /* Game page */
-    .game-page{display:grid; grid-template-columns: 1fr 360px; gap:16px}
-    .game-hero{background:var(--panel); border:1px solid var(--stroke); border-radius:14px; padding:12px}
-    .game-hero canvas{width:100%; height:auto; aspect-ratio: 16/10; background:#06070d; border-radius:10px}
-    .game-side{display:flex; flex-direction:column; gap:12px}
-    .game-box{background:var(--panel); border:1px solid var(--stroke); border-radius:14px; padding:12px}
-    .row{display:flex; align-items:center; gap:8px}
-    .row.spread{justify-content:space-between}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-weight: 750; letter-spacing: .2px;
+}
 
-    .comment{border-top:1px dashed var(--stroke); padding:8px 0}
-    .comment small{color:var(--muted)}
+.brand .logo{
+  width:30px; height:30px; border-radius: 8px;
+  display:grid; place-items:center;
+  background: #0F1114;
+  border: 1px solid var(--stroke);
+  box-shadow: 0 0 0 2px rgba(20,163,127,.12);
+}
+.brand .logo svg{ opacity: .92; }
 
-    /* Empty states */
-    .empty{border:1px dashed var(--stroke); background:rgba(255,255,255,.02); padding:20px; border-radius:14px; text-align:center; color:var(--muted)}
+.search-wrap{ flex:1; display:flex; justify-content:center; }
 
-    /* Modals */
-    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); z-index:50}
-    .modal.active{display:grid}
-    .dialog{width:min(520px, 92%); background:var(--panel); border:1px solid var(--stroke); border-radius:16px; padding:16px; box-shadow:var(--shadow)}
-    .dialog h3{margin-top:0}
+.search{
+  width: min(720px, 95%);
+  display:flex; align-items:center; gap:10px;
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  padding: 10px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+}
+.search input{
+  flex:1; background: transparent; border:0; color: var(--text);
+  outline: none; font-size: var(--fs-2);
+}
 
-    /* Pills + Chips */
-    .pill-btn{background:var(--panel); border:1px solid var(--stroke); padding:8px 12px; border-radius:999px; font-weight:600}
-    .pill-btn.brand{background:linear-gradient(135deg, var(--brand), #4f46e5); border-color:transparent}
+/* Nav CTAs */
+.nav-cta{ margin-left:auto; display:flex; gap:8px; }
+.btn{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  color: var(--text);
+  padding: 9px 13px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform .06s ease, background .2s ease, border-color .2s ease;
+}
+.btn:hover{ background: color-mix(in oklab, var(--panel) 85%, white 0%); transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); }
 
-    /* Links as subtle buttons */
-    .link{color:var(--brand-2); font-weight:600}
+.btn.brand{
+  background: color-mix(in oklab, var(--brand) 18%, black 82%);
+  border-color: color-mix(in oklab, var(--brand) 35%, black 65%);
+}
+.btn.brand:hover{
+  background: color-mix(in oklab, var(--brand) 26%, black 74%);
+  border-color: color-mix(in oklab, var(--brand) 42%, black 58%);
+}
+.btn.ghost{
+  background: transparent;
+  border: 1px solid var(--stroke);
+}
 
-    /* Responsive */
-    @media (max-width: 1024px){
-      .canvas-wrap{grid-template-columns:1fr}
-      .game-page{grid-template-columns:1fr}
-      .layout{grid-template-columns:1fr}
-      .sidebar{display:none}
-      .search{width:100%}
-    }
+/* ---------------------------------
+   Layout
+   --------------------------------- */
+.layout{
+  display:grid; grid-template-columns: 260px 1fr; gap:18px;
+  padding: 18px; max-width: 1360px; margin-inline: auto;
+}
+.sidebar{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding: 12px;
+  position: sticky;
+  top: 72px;
+  height: calc(100vh - 90px);
+  overflow:auto;
+}
+.sidebar h3{
+  margin: 10px; margin-top: 4px;
+  font-size: 12px; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--muted);
+}
+.subs-list{ display:flex; flex-direction:column; gap:6px; padding:6px; }
+.sub-item{
+  display:flex; align-items:center; gap:10px;
+  padding:8px; border-radius:10px;
+  transition: background .15s ease;
+}
+.sub-item:hover{ background: var(--panel-2); }
+.avatar{
+  width:28px; height:28px; border-radius: 999px;
+  background: radial-gradient(35% 35% at 30% 30%, #2BB891 0%, #14A37F 45%, #0E0F12 100%);
+  border: 1px solid var(--stroke);
+}
+
+.content{ min-height: 60vh; }
+
+/* ---------------------------------
+   Studio / Prompt area
+   --------------------------------- */
+.studio{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding: 16px;
+  display:grid; grid-template-columns:1fr; gap:14px;
+  box-shadow: var(--shadow);
+}
+.prompt-wrap{
+  display:flex; align-items:flex-start; gap:10px;
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  padding: 12px; border-radius: 14px;
+}
+.prompt-wrap textarea{
+  flex:1; min-height: 68px; max-height: 220px; width:100%;
+  resize: vertical; background: transparent; border: 0; color: var(--text);
+  outline: none; font-size: var(--fs-2);
+}
+.prompt-actions{ display:flex; flex-wrap:wrap; gap:8px; }
+
+.canvas-wrap{ display:grid; grid-template-columns: 1fr 380px; gap:14px; }
+.play-area{
+  background: var(--panel-2);
+  border: 1px solid var(--stroke);
+  border-radius: 14px; padding: 14px;
+  display:grid; place-items:center;
+}
+.play-area canvas{
+  background: #0A0B0D;
+  border-radius: 10px;
+  width: 100%; height:auto; aspect-ratio: 16/10;
+  border: 1px solid rgba(255,255,255,.03);
+}
+.game-meta{
+  background: var(--panel-2);
+  border: 1px solid var(--stroke);
+  border-radius: 14px; padding: 14px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field input, .field textarea, .field select{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px; outline: none;
+}
+.field input::placeholder, .field textarea::placeholder{ color: color-mix(in oklab, var(--muted) 80%, transparent); }
+
+/* ---------------------------------
+   Cards / Grids
+   --------------------------------- */
+.grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:14px; }
+.card{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 14px; overflow:hidden;
+  display:flex; flex-direction:column;
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+}
+.card:hover{ transform: translateY(-1px); border-color: color-mix(in oklab, var(--stroke) 70%, var(--brand) 30%); }
+
+.thumb{
+  position:relative; background: #0F1114;
+  height: 130px; display:grid; place-items:center;
+}
+.thumb .pill{
+  position:absolute; top:8px; left:8px;
+  background: rgba(20,163,127,.14);
+  border: 1px solid rgba(20,163,127,.28);
+  color:#CFF1E8; font-size:12px; padding:4px 8px; border-radius: 999px;
+}
+.thumb img{ width:100%; height:100%; object-fit:cover; }
+.card .info{ padding:10px; display:grid; gap:8px; }
+.mini{ display:flex; align-items:center; gap:8px; color: var(--muted); font-size: 13px; }
+.like-chip{ display:inline-flex; align-items:center; gap:6px; }
+
+.section-title{
+  display:flex; align-items:center; justify-content:space-between;
+  margin: 16px 0 10px;
+}
+.section-title h2{ font-size: var(--fs-3); margin:0; }
+
+/* ---------------------------------
+   Game page
+   --------------------------------- */
+.game-page{ display:grid; grid-template-columns: 1fr 360px; gap:16px; }
+.game-hero{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 14px; padding: 12px;
+  box-shadow: var(--shadow);
+}
+.game-hero canvas{
+  width:100%; height:auto; aspect-ratio: 16/10;
+  background:#0A0B0D; border-radius:10px;
+  border: 1px solid rgba(255,255,255,.03);
+}
+.game-side{ display:flex; flex-direction:column; gap:12px; }
+.game-box{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 14px; padding: 12px;
+}
+.row{ display:flex; align-items:center; gap:8px; }
+.row.spread{ justify-content: space-between; }
+
+.comment{ border-top: 1px dashed var(--stroke); padding: 8px 0; }
+.comment small{ color: var(--muted); }
+
+/* ---------------------------------
+   Empty states
+   --------------------------------- */
+.empty{
+  border: 1px dashed var(--stroke);
+  background: color-mix(in oklab, var(--panel) 88%, white 0%);
+  padding: 18px; border-radius: 14px; text-align:center; color: var(--muted);
+}
+
+/* ---------------------------------
+   Modals
+   --------------------------------- */
+.modal{
+  position:fixed; inset:0; display:none; place-items:center;
+  background: rgba(0,0,0,.55); z-index: 50;
+}
+.modal.active{ display:grid; }
+.dialog{
+  width: min(520px, 92%);
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 16px; padding: 16px; box-shadow: var(--shadow);
+}
+.dialog h3{ margin-top: 0; }
+
+/* Pills / small buttons */
+.pill-btn{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  padding: 8px 12px; border-radius: 999px; font-weight: 600;
+  transition: background .15s ease, border-color .15s ease, transform .06s ease;
+}
+.pill-btn:hover{ background: color-mix(in oklab, var(--panel) 85%, white 0%); transform: translateY(-1px); }
+.pill-btn.brand{
+  background: color-mix(in oklab, var(--brand) 18%, black 82%);
+  border-color: color-mix(in oklab, var(--brand) 35%, black 65%);
+}
+
+/* Link style */
+.link{
+  color: var(--brand-2); font-weight: 600;
+}
+.link:hover{ text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---------------------------------
+   Responsive
+   --------------------------------- */
+@media (max-width: 1024px){
+  .canvas-wrap{ grid-template-columns: 1fr; }
+  .game-page{ grid-template-columns: 1fr; }
+  .layout{ grid-template-columns: 1fr; }
+  .sidebar{ display:none; }
+  .search{ width: 100%; }
+}
+
+/* Micro-tweaks for icons/text */
+svg[aria-hidden="true"]{ opacity: .86; }
+small, .mini{ letter-spacing: .1px; }
