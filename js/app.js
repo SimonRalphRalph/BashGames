@@ -156,13 +156,13 @@
           <div class="play-area"><canvas id="studioCanvas" width="800" height="500" aria-label="Game preview"></canvas></div>
           <div class="game-meta">
             <div class="field"><label>Game Title</label><input id="gameTitle" placeholder="Untitled Game"></div>
-            <div class="field"><label>Description</label><textarea id="gameDesc" rows="5" placeholder="What is your game about?"></textarea></div>
+            <div class="field"><label>Description</label><textarea id="gameDesc" rows="5" placeholder="Describe what you want to play..."></textarea></div>
             <div class="row" style="gap:8px; flex-wrap:wrap">
               <button class="btn brand" id="btnSave">Save Draft</button>
               <button class="btn" id="btnPublish">Publish</button>
               <span id="saveStatus" style="color:var(--muted)"></span>
             </div>
-            <small style="color:var(--muted)">Pro tip: Use the arrow keys or WASD to play. We’ll capture a snapshot for your thumbnail.</small>
+            <small style="color:var(--muted)">Pro tip: Use the arrow keys or WASD to play. A snapshot of your game becomes the thumbnail.</small>
           </div>
         </div>
       `;
