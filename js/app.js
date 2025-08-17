@@ -1,5 +1,5 @@
 /*
-      BashGames — Single-file SPA with a mock backend using localStorage.
+      Playform — Single-file SPA with a mock backend using localStorage.
       Key features:
         - Accounts (signup/signin/signout)
         - LLM-simulated game generator that produces canvas-based games from prompts
