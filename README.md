@@ -1,5 +1,5 @@
-# BashGames 🎮  
-_“YouTube for browser-based games” — create, play, like, share._
+# BashGames   
+_“Create, play, like, share._
 
 **Live site:** https://simonralphralph.github.io/BashGames/
 
