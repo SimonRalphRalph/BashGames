@@ -28,13 +28,6 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 
 ---
 
-BashGames/
-├── index.html          # app shell / layout
-├── css/
-│   └── styles.css      # all styles
-└── js/
-    └── app.js          # app logic, canvas rendering, localStorage mock backend
-
 ## Quick Start
 
 ### View online
