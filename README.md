@@ -1,9 +1,9 @@
-# BashGames   
+# Playform   
 _“Create, play, like, share._
 
 **Live site:** https://simonralphralph.github.io/BashGames/
 
-BashGames is a single-page web app that lets creators **design browser-based games with an integrated LLM** (pre-primed to output playable `<canvas>` games), then **publish** them for others to **play, like, share, and comment**.  
+Playform is a single-page web app that lets creators **design browser-based games with an integrated LLM** (pre-primed to output playable `<canvas>` games), then **publish** them for others to **play, like, share, and comment**.  
 Non-signed-in users can **play**; accounts are required to **create, name, save, publish, like, comment, and subscribe**.
 
 ---
