@@ -1,0 +1,140 @@
+/* =============================================
+       Minimal, clean, modern UI (ChatGPT + YouTube)
+       Single-file app: no external dependencies.
+       All data is stored in localStorage.
+       ============================================= */
+
+    :root{
+      --bg:#0f1117;           /* page background */
+      --panel:#151823;        /* surfaces */
+      --panel-2:#0c0e14;      /* deeper panels */
+      --muted:#9aa4b2;        /* muted text */
+      --text:#e6e8ee;         /* primary text */
+      --brand:#7c5cff;        /* action color */
+      --brand-2:#00e0b8;      /* accent */
+      --danger:#ff5d5d;       /* errors */
+      --ok:#2ad67b;           /* success */
+      --card:#131726;         /* card bg */
+      --stroke:#22273b;       /* borders */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 70% -10%, #1c2040 0%, rgba(28,32,64,0) 55%), var(--bg);
+      color:var(--text);
+    }
+
+    a{color:inherit; text-decoration:none}
+    button{cursor:pointer}
+
+    /* Top Nav */
+    header.nav{
+      position:sticky; top:0; z-index:30;
+      background: linear-gradient(180deg, rgba(12,14,20,.95) 0%, rgba(12,14,20,.85) 100%);
+      backdrop-filter: saturate(140%) blur(10px);
+      border-bottom:1px solid var(--stroke);
+    }
+    .nav-inner{display:flex; align-items:center; gap:14px; padding:12px clamp(12px,3vw,24px);} 
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px}
+    .brand .logo{
+      width:34px;height:34px; border-radius:10px; display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--brand) 0%, #3a8bff 100%);
+      box-shadow:var(--shadow)
+    }
+    .brand .logo svg{filter:drop-shadow(0 6px 18px rgba(124,92,255,.45))}
+
+    /* Center search */
+    .search-wrap{flex:1; display:flex; justify-content:center}
+    .search{
+      width:min(680px, 92%);
+      display:flex; align-items:center; gap:10px;
+      background:var(--panel);
+      border:1px solid var(--stroke);
+      border-radius: 999px;
+      padding:10px 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .search input{flex:1; background:transparent; border:0; color:var(--text); outline:none; font-size:15px}
+
+    .nav-cta{margin-left:auto; display:flex; gap:8px}
+    .btn{background:var(--panel); border:1px solid var(--stroke); color:var(--text); padding:10px 14px; border-radius:10px; font-weight:600}
+    .btn.brand{background:linear-gradient(135deg, var(--brand), #4f46e5); border-color:transparent}
+    .btn.ghost{background:transparent; border:1px solid var(--stroke)}
+
+    /* Layout */
+    .layout{display:grid; grid-template-columns: 260px 1fr; gap:18px; padding:18px; max-width:1400px; margin-inline:auto}
+    .sidebar{background:var(--panel); border:1px solid var(--stroke); border-radius:var(--radius); padding:12px; position:sticky; top:78px; height:calc(100vh - 96px); overflow:auto}
+    .sidebar h3{margin:10px; margin-top:6px; font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--muted)}
+    .subs-list{display:flex; flex-direction:column; gap:6px; padding:6px}
+    .sub-item{display:flex; align-items:center; gap:10px; padding:8px; border-radius:10px; transition:background .2s}
+    .sub-item:hover{background:var(--panel-2)}
+    .avatar{width:28px;height:28px;border-radius:50%; background:linear-gradient(135deg,#3a8bff,#00e0b8)}
+
+    .content{min-height:60vh}
+
+    /* Chat-style prompt */
+    .studio{background:var(--panel); border:1px solid var(--stroke); border-radius:var(--radius); padding:18px; display:grid; grid-template-columns:1fr; gap:14px}
+    .prompt-wrap{display:flex; align-items:flex-start; gap:10px; background:var(--card); border:1px solid var(--stroke); padding:12px; border-radius:14px}
+    .prompt-wrap textarea{flex:1; min-height:64px; max-height:200px; width:100%; resize:vertical; background:transparent; border:0; color:var(--text); outline:none; font-size:16px}
+    .prompt-actions{display:flex; flex-wrap:wrap; gap:8px}
+
+    .canvas-wrap{display:grid; grid-template-columns: 1fr 380px; gap:14px}
+    .play-area{background:var(--panel-2); border:1px solid var(--stroke); border-radius:14px; padding:14px; display:grid; place-items:center}
+    .play-area canvas{background:#06070d; border-radius:10px; width:100%; height:auto; aspect-ratio: 16 / 10}
+    .game-meta{background:var(--panel-2); border:1px solid var(--stroke); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:10px}
+    .field{display:flex; flex-direction:column; gap:6px}
+    .field input,.field textarea, .field select{background:var(--panel); border:1px solid var(--stroke); color:var(--text); padding:10px 12px; border-radius:10px; outline:none}
+
+    /* Grids */
+    .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:14px}
+    .card{background:var(--panel); border:1px solid var(--stroke); border-radius:14px; overflow:hidden; display:flex; flex-direction:column}
+    .thumb{position:relative; background: #0e1220; height:130px; display:grid; place-items:center}
+    .thumb .pill{position:absolute; top:8px; left:8px; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.08); color:#fff; font-size:12px; padding:4px 8px; border-radius:999px}
+    .thumb img{width:100%; height:100%; object-fit:cover}
+    .card .info{padding:10px; display:grid; gap:8px}
+    .mini{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px}
+    .like-chip{display:inline-flex; align-items:center; gap:6px}
+
+    .section-title{display:flex; align-items:center; justify-content:space-between; margin:16px 0 10px}
+    .section-title h2{font-size:18px; margin:0}
+
+    /* Game page */
+    .game-page{display:grid; grid-template-columns: 1fr 360px; gap:16px}
+    .game-hero{background:var(--panel); border:1px solid var(--stroke); border-radius:14px; padding:12px}
+    .game-hero canvas{width:100%; height:auto; aspect-ratio: 16/10; background:#06070d; border-radius:10px}
+    .game-side{display:flex; flex-direction:column; gap:12px}
+    .game-box{background:var(--panel); border:1px solid var(--stroke); border-radius:14px; padding:12px}
+    .row{display:flex; align-items:center; gap:8px}
+    .row.spread{justify-content:space-between}
+
+    .comment{border-top:1px dashed var(--stroke); padding:8px 0}
+    .comment small{color:var(--muted)}
+
+    /* Empty states */
+    .empty{border:1px dashed var(--stroke); background:rgba(255,255,255,.02); padding:20px; border-radius:14px; text-align:center; color:var(--muted)}
+
+    /* Modals */
+    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); z-index:50}
+    .modal.active{display:grid}
+    .dialog{width:min(520px, 92%); background:var(--panel); border:1px solid var(--stroke); border-radius:16px; padding:16px; box-shadow:var(--shadow)}
+    .dialog h3{margin-top:0}
+
+    /* Pills + Chips */
+    .pill-btn{background:var(--panel); border:1px solid var(--stroke); padding:8px 12px; border-radius:999px; font-weight:600}
+    .pill-btn.brand{background:linear-gradient(135deg, var(--brand), #4f46e5); border-color:transparent}
+
+    /* Links as subtle buttons */
+    .link{color:var(--brand-2); font-weight:600}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .canvas-wrap{grid-template-columns:1fr}
+      .game-page{grid-template-columns:1fr}
+      .layout{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .search{width:100%}
+    }
