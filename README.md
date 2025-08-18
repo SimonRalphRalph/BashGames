@@ -1,5 +1,5 @@
 # Playform (wt)  
-_"Create, play, share."_
+_"Bring imagination back to your play."_
 
 **Live site:** https://simonralphralph.github.io/BashGames/
 
@@ -9,8 +9,8 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 
 
 **Features**
-- Minimal, modern UI (ChatGPT × YouTube vibes)
-- Central prompt box to describe a game → render in `<canvas>`
+- Minimal, modern UI (akin to OpenAI)
+- Central prompt box (studio area) to describe a game → render in CGPT's `<canvas>`
 - Game pages with title, creator, likes, comments, and share actions
 - **Trending** and **Suggested** grids (mock data)
 - **Subscriptions** list (for signed-in users)
