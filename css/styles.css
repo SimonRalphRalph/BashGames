@@ -102,7 +102,7 @@ header.nav{
 .brand .logo{
   width:30px; height:30px; border-radius: 8px;
   display:grid; place-items:center;
-  background: #0F1114;
+  background: ##F4F6F8;
   border: 1px solid var(--stroke);
   box-shadow: 0 0 0 2px rgba(20,163,127,.12);
 }
@@ -248,7 +248,7 @@ header.nav{
   display:grid; place-items:center;
 }
 .play-area canvas{
-  background: #0A0B0D;
+  background: #F4F6F8;
   border-radius: 10px;
   width: 100%; height:auto; aspect-ratio: 16/10;
   border: 1px solid rgba(255,255,255,.03);
@@ -283,7 +283,7 @@ header.nav{
 .card:hover{ transform: translateY(-1px); border-color: color-mix(in oklab, var(--stroke) 70%, var(--brand) 30%); }
 
 .thumb{
-  position:relative; background: #0F1114;
+  position:relative; background: ##F4F6F8;
   height: 130px; display:grid; place-items:center;
 }
 .thumb .pill{
