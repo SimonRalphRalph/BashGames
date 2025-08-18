@@ -1,5 +1,5 @@
 # Playform   
-_"Create, play, and share."_
+_"Create, play, share."_
 
 **Live site:** https://simonralphralph.github.io/BashGames/
 
