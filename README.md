@@ -31,7 +31,7 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 **Quick Start Payform**
 
 **View online**
-Visit: **https://simonralphralph.github.io/BashGames/**
+ **https://simonralphralph.github.io/BashGames/**
 
 **Run locally**
 ```bash
