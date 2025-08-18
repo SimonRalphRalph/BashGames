@@ -1,4 +1,4 @@
-# Playform (wt)  
+# Playform (WT)  
 _"Bring imagination back to your play."_
 
 **Live site:** https://simonralphralph.github.io/BashGames/
