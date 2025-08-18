@@ -188,6 +188,34 @@ header.nav{
 
 .content{ min-height: 60vh; }
 
+/* Make the main content take the full grid width (below the sidebar row) */
+.layout .content{
+  grid-column: 1 / -1;
+}
+
+/* Center the studio card as the primary focal point */
+#view{
+  display: grid;
+  gap: 16px;
+}
+#view .studio{
+  justify-self: center;
+  width: min(980px, 100%);
+  margin-inline: auto;
+}
+
+/* Keep the canvas+meta from feeling squished on wide screens */
+#view .canvas-wrap{
+  width: 100%;
+}
+
+/* Optional: slightly enlarge the prompt on large viewports */
+@media (min-width: 1200px){
+  #view .prompt-wrap textarea{
+    font-size: clamp(16px, 1.8vw, 18px);
+  }
+}
+
 /* ---------------------------------
    Studio / Prompt area
    --------------------------------- */
