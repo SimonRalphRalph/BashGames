@@ -13,7 +13,7 @@
   --surface: #0E0F12;      /* top-level surfaces (header) */
   --panel: #111216;        /* cards / panels */
   --panel-2: #0B0C0D;      /* deeper panels / canvas wrap */
-  --card: #0F1114;         /* inner card */
+  --card: var(--card);         /* inner card */
   --text: #ECEDEE;         /* primary text */
   --muted: #9AA0A6;        /* secondary text */
   --stroke: rgba(255,255,255,0.09);  /* borders */
@@ -43,7 +43,7 @@ html[data-theme="light"]{
   --panel: #F7F8F8;
   --panel-2: #FFFFFF;
   --card: #FFFFFF;
-  --text: #0C0D0E;
+  --text: var(--text);
   --muted: #5C6269;
   --stroke: rgba(0,0,0,0.08);
 }
@@ -315,7 +315,7 @@ header.nav{
 }
 .game-hero canvas{
   width:100%; height:auto; aspect-ratio: 16/10;
-  background:#0A0B0D; border-radius:10px;
+  background:var(--canvas-bg); border-radius:10px;
   border: 1px solid rgba(255,255,255,.03);
 }
 .game-side{ display:flex; flex-direction:column; gap:12px; }
