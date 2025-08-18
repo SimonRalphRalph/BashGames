@@ -8,7 +8,7 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 
 
 
-## Features
+**Features**
 - Minimal, modern UI (ChatGPT × YouTube vibes)
 - Central prompt box to describe a game → render in `<canvas>`
 - Game pages with title, creator, likes, comments, and share actions
@@ -20,7 +20,7 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 
 
 
-## Stack
+**Stack**
 - **HTML** (structure)
 - **CSS** in `css/styles.css` (styling)
 - **JavaScript** in `js/app.js` (logic, mock backend via `localStorage`)
@@ -28,12 +28,12 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 
 
 
-## Quick Start Payform
+**Quick Start Payform**
 
-### View online
+**View online**
 Just visit: **https://simonralphralph.github.io/BashGames/**
 
-### Run locally
+**Run locally**
 ```bash
 # clone
 git clone https://github.com/SimonRalphRalph/BashGames.git
