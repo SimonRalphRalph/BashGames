@@ -31,7 +31,7 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 **Quick Start Payform**
 
 **View online**
-Just visit: **https://simonralphralph.github.io/BashGames/**
+Visit: **https://simonralphralph.github.io/BashGames/**
 
 **Run locally**
 ```bash
@@ -41,4 +41,4 @@ cd BashGames
 
 # open in your browser (macOS)
 open index.html
-# or with VS Code Live Server / any static server if you prefer
+# or with VS Code Live Server / any static server
