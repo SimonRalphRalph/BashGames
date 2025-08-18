@@ -1,4 +1,4 @@
-# Playform   
+# Playform (wt)  
 _"Create, play, share."_
 
 **Live site:** https://simonralphralph.github.io/BashGames/
@@ -6,7 +6,7 @@ _"Create, play, share."_
 Playform is a single-page web app that lets creators **design browser-based games by speaking them to life** (using a pre-primed LLM with playable outputs `<canvas>` games), then **publish** them for others to **play, like, share, and comment**.  
 Non-signed-in users can **play**; accounts are required to **create, name, save, publish, like, comment, and subscribe**.
 
----
+
 
 ## Features
 - Minimal, modern UI (ChatGPT × YouTube vibes)
@@ -18,17 +18,17 @@ Non-signed-in users can **play**; accounts are required to **create, name, save,
 - **LocalStorage**-backed mock auth and persistence (no server)
 - Preloaded demo games (e.g., Snake, Pong, Breakout)
 
----
 
-## Tech Stack
+
+## Stack
 - **HTML** (structure)
 - **CSS** in `css/styles.css` (styling)
 - **JavaScript** in `js/app.js` (logic, mock backend via `localStorage`)
 - **GitHub Pages** for hosting (static)
 
----
 
-## Quick Start
+
+## Quick Start Payform
 
 ### View online
 Just visit: **https://simonralphralph.github.io/BashGames/**
