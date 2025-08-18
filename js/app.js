@@ -18,6 +18,11 @@
       All code below is heavily commented for extendability.
     */
 
+function getCSSVar(name, fallback) {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
+
     // ---------- Utilities ----------
     const $ = sel => document.querySelector(sel);
     const $$ = sel => Array.from(document.querySelectorAll(sel));
@@ -460,12 +465,32 @@
         width: canvas.width, height: canvas.height,
         rand:(a,b)=> Math.random()*(b-a)+a,
         keys,
-        clear:()=>{ ctx.fillStyle = '#06070d'; ctx.fillRect(0,0,canvas.width,canvas.height); },
+        _bg: getCSSVar('--canvas-bg', '#0A0B0D'),
+clear() {
+  ctx.fillStyle = this._bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+},
         text:(s,x,y,size=16)=>{ ctx.fillStyle='#e6e8ee'; ctx.font=`${size}px ui-sans-serif, system-ui`; ctx.fillText(s,x,y); },
         circle:(x,y,r,c='#fff')=>{ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); },
         rect:(x,y,w,h,c='#fff')=>{ ctx.fillStyle=c; ctx.fillRect(x,y,w,h); },
         now:()=> performance.now(),
       };
+
+          //React to live theme changes.
+          function startLoop(update){
+  let id; let last = performance.now();
+  const loop = (t)=> {
+    id = requestAnimationFrame(loop);
+    const dt = (t - last) / 1000; last = t;
+    // keep bg in sync if theme changed
+    if (utils._bg !== getCSSVar('--canvas-bg', utils._bg)) {
+      utils._bg = getCSSVar('--canvas-bg', utils._bg);
+    }
+    update(dt);
+  };
+  id = requestAnimationFrame(loop);
+  return ()=> cancelAnimationFrame(id);
+}
 
       // Provide a simple game loop helper that returns a stop function.
       function startLoop(update){
