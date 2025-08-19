@@ -1,5 +1,5 @@
-# Playform (WT)  
-_"Bring imagination back to your play."_
+# playform (WT)  
+_"Play with your imagination."_
 
 **Live site:** https://simonralphralph.github.io/BashGames/
 
