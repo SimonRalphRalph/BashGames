@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GameStudio — YouTube for Browser Games</title>
+  <title>playform — Play With Your Imagination</title>
 
   <style>
     /* =========================================================
-       GameStudio — OpenAI‑inspired theme (refactored)
+       Playform — OpenAI‑inspired theme (refactored)
        Users can generate games WITHOUT logging in.
        ========================================================= */
 
@@ -257,7 +257,7 @@
       </div>
 
       <div class="nav-cta" id="userMenu" style="display:none">
-        <button class="btn" id="btnLiked">❤ Liked</button>
+        <button class="btn" id="btnLiked">Liked</button>
         <button class="btn" id="btnSubscriptions">Subscriptions</button>
         <button class="btn ghost" id="btnSignOut">Sign out</button>
       </div>
@@ -286,7 +286,7 @@
   <div class="modal" id="authModal" aria-hidden="true" role="dialog">
     <div class="dialog">
       <h3 id="authTitle">Create your free account</h3>
-      <p style="margin-top:-6px; color:var(--muted)">Log in to save drafts, publish, like, comment, and subscribe.</p>
+      <p style="margin-top:-6px; color:var(--muted)">Sign up or log in to create, play, and connect.</p>
       <div class="field"><label>Username</label><input id="authUsername" placeholder="e.g. pixel_wizard"/></div>
       <div class="field"><label>Password</label><input id="authPassword" type="password" placeholder="••••••••"/></div>
       <div class="row" style="justify-content:flex-end; gap:8px; margin-top:10px">
@@ -299,7 +299,7 @@
   <div class="modal" id="requireModal" aria-hidden="true" role="dialog">
     <div class="dialog">
       <h3>Sign in to save & publish</h3>
-      <p style="color:var(--muted)">You can generate and play games without an account. Sign in only if you want to save drafts, publish, like, or comment.</p>
+      <p style="color:var(--muted)">You can generate and play games without an account. Sign in if you want to save drafts, publish, like, or comment.</p>
       <div class="row" style="justify-content:flex-end; gap:8px">
         <button class="btn ghost" onclick="toggleModal('requireModal', false)">Close</button>
         <button class="btn brand" onclick="openAuth('signup')">Create Account</button>
@@ -481,7 +481,7 @@
               <button class="btn" id="btnPublish">Publish</button>
               <span id="saveStatus" style="color:var(--muted)"></span>
             </div>
-            <small style="color:var(--muted)">Pro tip: Use the arrow keys or WASD to play. A snapshot of your game becomes the thumbnail.</small>
+            <small style="color:var(--muted)">Use the arrow keys or WASD to play. Your game snapshot will appear as the thumbnail.</small>
           </div>
         </div>
       `;
