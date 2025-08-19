@@ -7,7 +7,9 @@
    - High-contrast focus states, reduced motion aware
    ========================================================= */
 
-:root{
+:root{ --canvas-bg:#0A0B0D; }            /* dark */
+html[data-theme="light"]{ --canvas-bg:#F7F8F8; }  /* light */
+
   /* Core palette (dark) */
   --bg: #0B0C0E;           /* app background */
   --surface: #0E0F12;      /* top-level surfaces (header) */
@@ -46,6 +48,18 @@ html[data-theme="light"]{
   --text: var(--text);
   --muted: #5C6269;
   --stroke: rgba(0,0,0,0.08);
+}
+
+/* Theme-aware overrides for light mode buttons */
+html[data-theme="light"] .btn.brand,
+html[data-theme="light"] .pill-btn.brand{
+  background: color-mix(in oklab, var(--brand) 92%, white 8%);
+  border-color: color-mix(in oklab, var(--brand) 50%, var(--stroke) 50%);
+  color: white;
+}
+html[data-theme="light"] .btn.brand:hover,
+html[data-theme="light"] .pill-btn.brand:hover{
+  background: color-mix(in oklab, var(--brand) 100%, white 0%);
 }
 
 /* Base */
@@ -248,7 +262,7 @@ header.nav{
   display:grid; place-items:center;
 }
 .play-area canvas{
-  background: #F4F6F8;
+  background: var(--canvas-bg);
   border-radius: 10px;
   width: 100%; height:auto; aspect-ratio: 16/10;
   border: 1px solid rgba(255,255,255,.03);
