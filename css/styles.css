@@ -165,6 +165,69 @@ header.nav{
 .card .info{ padding:10px; display:grid; gap:8px; }
 .mini{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; }
 
+/* === Card layout & contrast fixes === */
+
+/* keep the thumbnail from visually overlapping the text row */
+.grid article{
+  border-radius: 16px;
+  overflow: hidden;                 /* ensures the image doesn't overlap the meta strip */
+  background: var(--panel);
+}
+
+/* make the thumbnail a true block and anchor the pill */
+.grid article .thumb{
+  position: relative;
+  display: block;
+  line-height: 0;                   /* removes extra line gap around images */
+}
+.grid article .thumb img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* give the bottom strip enough padding and a panel bg */
+.grid article .meta{
+  background: var(--panel);
+  padding: 14px 16px 16px;          /* more space so titles don't look clipped */
+}
+
+/* title spacing/line-height for better legibility */
+.grid article [data-title]{
+  display: block;
+  margin: 0 0 4px;
+  line-height: 1.2;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+/* Trending pill: always readable on vivid thumbnails */
+.grid article [data-pill]{
+  position: absolute; top: 12px; left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+
+  /* default muted overlay */
+  background: color-mix(in oklab, var(--panel) 85%, transparent 15%);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent 30%);
+  color: var(--text);
+  opacity: .9;
+}
+
+/* extra contrast by theme (works even on neon thumbnails) */
+html[data-theme="dark"] .grid article [data-pill]{
+  background: rgba(0,0,0,.36);
+  color: #fff;
+  border-color: rgba(255,255,255,.18);
+}
+html[data-theme="light"] .grid article [data-pill]{
+  background: rgba(255,255,255,.68);
+  color: var(--text);
+  border-color: rgba(0,0,0,.08);
+}
+
 /* Game page */
 .game-page{ display:grid; grid-template-columns: 1fr 360px; gap:16px; }
 .game-hero{ background:var(--panel); border:1px solid var(--stroke); border-radius:14px; padding:12px; box-shadow:var(--shadow); }
