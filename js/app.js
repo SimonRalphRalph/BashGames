@@ -174,7 +174,6 @@ function getCSSVar(name, fallback) {
       studio.className='studio u-surface';
       studio.innerHTML = `
         <div class="prompt-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:4px"><path d='M12 3l2.2 4.5L19 8l-3.5 3.4L16 17l-4-2.1L8 17l.5-5.6L5 8l4.8-.5L12 3Z' stroke='#9aa4b2' stroke-width='1.4' stroke-linejoin='round'/></svg>
           <textarea id="promptText" placeholder="Describe your game idea here. For example: ‘a cozy farming sim with cats’ or ‘a platformer where gravity flips’."></textarea>
         </div>
         <div class="prompt-actions">
