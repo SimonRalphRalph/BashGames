@@ -175,7 +175,7 @@ function getCSSVar(name, fallback) {
       studio.innerHTML = `
         <div class="prompt-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:4px"><path d='M12 3l2.2 4.5L19 8l-3.5 3.4L16 17l-4-2.1L8 17l.5-5.6L5 8l4.8-.5L12 3Z' stroke='#9aa4b2' stroke-width='1.4' stroke-linejoin='round'/></svg>
-          <textarea id="promptText" placeholder="Describe your game idea… for example: ‘a cozy farming sim with cats’ or ‘a platformer where gravity flips’."></textarea>
+          <textarea id="promptText" placeholder="Describe your game idea here. For example: ‘a cozy farming sim with cats’ or ‘a platformer where gravity flips’."></textarea>
         </div>
         <div class="prompt-actions">
           <button class="pill-btn brand" id="btnGenerate">✨ Generate Game</button>
@@ -185,13 +185,13 @@ function getCSSVar(name, fallback) {
           <div class="play-area"><canvas id="studioCanvas" width="800" height="500" aria-label="Game preview"></canvas></div>
           <div class="game-meta">
             <div class="field"><label>Game Title</label><input id="gameTitle" placeholder="Untitled Game"></div>
-            <div class="field"><label>Description</label><textarea id="gameDesc" rows="5" placeholder="Describe what you want to play..."></textarea></div>
+            <div class="field"><label>Description</label><textarea id="gameDesc" rows="5" placeholder="What have you created?..."></textarea></div>
             <div class="row" style="gap:8px; flex-wrap:wrap">
               <button class="btn brand" id="btnSave">Save Draft</button>
               <button class="btn" id="btnPublish">Publish</button>
               <span id="saveStatus" style="color:var(--muted)"></span>
             </div>
-            <small style="color:var(--muted)">Pro tip: Use the arrow keys or WASD to play. A snapshot of your game becomes the thumbnail.</small>
+            <small style="color:var(--muted)">Use the arrow keys or WASD to play. A snapshot of your game becomes the thumbnail.</small>
           </div>
         </div>
       `;
@@ -539,7 +539,7 @@ clear() {
     // ---------- Game Templates (stringified JS) ----------
     const GAME_TEMPLATES = {
       // Blank canvas (for initial state)
-      blank: `function startGame(canvas, ctx, utils, startLoop){\n  utils.clear();\n  utils.text('Describe a game in the box above, then click Generate.\\nUse arrow keys/WASD to play.', 20, 40, 18);\n  return ()=>{};\n}`,
+      blank: `function startGame(canvas, ctx, utils, startLoop){\n  utils.clear();\n  utils.text('Describe a game in the box above, then click Generate.', 20, 40, 18);\n  return ()=>{};\n}`,
 
       // Simple bouncing demo
       bouncer: `function startGame(canvas, ctx, utils, startLoop){\n  let x=100,y=100,vx=140,vy=170,r=18;\n  const stop = startLoop(dt=>{\n    utils.clear();\n    x+=vx*dt; y+=vy*dt;\n    if(x<r||x>canvas.width-r) vx*=-1; if(y<r||y>canvas.height-r) vy*=-1;\n    if(utils.keys.has('arrowup')||utils.keys.has('w')){ vy-=10; }\n    if(utils.keys.has('arrowdown')||utils.keys.has('s')){ vy+=10; }\n    if(utils.keys.has('arrowleft')||utils.keys.has('a')){ vx-=10; }\n    if(utils.keys.has('arrowright')||utils.keys.has('d')){ vx+=10; }\n    utils.circle(x,y,r,'#7c5cff');\n    utils.text('Bouncer — press arrow keys', 14, 24, 16);\n  });\n  return ()=> stop();\n}`,
