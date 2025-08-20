@@ -145,7 +145,16 @@ header.nav{
 /* Studio / Prompt */
 .studio{ background:var(--panel); border:1px solid var(--stroke); border-radius:var(--radius); padding:16px; display:grid; gap:14px; box-shadow:var(--shadow); width:min(980px,100%); justify-self:center; }
 .prompt-wrap{ display:flex; align-items:flex-start; gap:10px; background:var(--card); border:1px solid var(--stroke); padding:12px; border-radius:14px; }
-.prompt-wrap textarea{ flex:1; min-height:68px; max-height:220px; width:100%; resize:vertical; background:transparent; border:0; color:var(--text); outline:none; font-size:var(--fs-2); }
+.prompt-wrap textarea{flex: 1;
+  min-height: 68px;
+  max-height: 220px;
+  width: 100%;
+  resize: vertical;
+  background: transparent;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text); }
 .prompt-actions{ display:flex; flex-wrap:wrap; gap:8px; }
 .canvas-wrap{ display:grid; grid-template-columns: 1fr 380px; gap:14px; }
 .play-area{ background:var(--panel-2); border:1px solid var(--stroke); border-radius:14px; padding:14px; display:grid; place-items:center; }
