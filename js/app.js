@@ -41,6 +41,30 @@ function getCSSVar(name, fallback) {
       if(!m) return; m.classList.toggle('active', !!show);
     }
 
+    // ---------- Keyboard state (shared across all games) ----------
+    const KEY_STATE = new Set();
+
+    function isTextTarget(t){
+      return t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+    }
+
+    function onKeyDown(e){
+      if (isTextTarget(e?.target)) return;
+      const k = (e?.key || '').toLowerCase();
+      if (!k) return;
+      KEY_STATE.add(k);
+    }
+
+    function onKeyUp(e){
+      if (isTextTarget(e?.target)) return;
+      const k = (e?.key || '').toLowerCase();
+      if (!k) return;
+      KEY_STATE.delete(k);
+    }
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+
     // ---------- Storage API (mock backend) ----------
     function getUsers(){ return JSON.parse(localStorage.getItem('gba_users')||'[]'); }
     function setUsers(v){ localStorage.setItem('gba_users', JSON.stringify(v)); }
@@ -147,11 +171,11 @@ function getCSSVar(name, fallback) {
 
       // Studio prompt (always visible). Non-logged-in cannot actually generate.
       const studio = document.createElement('section');
-      studio.className='studio';
+      studio.className='studio u-surface';
       studio.innerHTML = `
         <div class="prompt-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:4px"><path d='M12 3l2.2 4.5L19 8l-3.5 3.4L16 17l-4-2.1L8 17l.5-5.6L5 8l4.8-.5L12 3Z' stroke='#9aa4b2' stroke-width='1.4' stroke-linejoin='round'/></svg>
-          <textarea id="promptText" placeholder="Describe your game idea… for example: ‘a cozy farming sim with cats’ or ‘a platformer where gravity flips’.""></textarea>
+          <textarea id="promptText" placeholder="Describe your game idea… for example: ‘a cozy farming sim with cats’ or ‘a platformer where gravity flips’."></textarea>
         </div>
         <div class="prompt-actions">
           <button class="pill-btn brand" id="btnGenerate">✨ Generate Game</button>
@@ -455,47 +479,33 @@ function getCSSVar(name, fallback) {
 
       const ctx = canvas.getContext('2d');
       // Basic utils exposed to the game code (no window/document)
-      const keys = new Set();
-      const onKeyDown = e=>{ keys.add(e.key.toLowerCase()); };
-      const onKeyUp = e=>{ keys.delete(e.key.toLowerCase()); };
-      window.addEventListener('keydown', onKeyDown);
-      window.addEventListener('keyup', onKeyUp);
-
       const utils = {
         width: canvas.width, height: canvas.height,
         rand:(a,b)=> Math.random()*(b-a)+a,
-        keys,
+        keys: KEY_STATE,
         _bg: getCSSVar('--canvas-bg', '#0A0B0D'),
 clear() {
   ctx.fillStyle = this._bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 },
-        text:(s,x,y,size=16)=>{ ctx.fillStyle='#e6e8ee'; ctx.font=`${size}px ui-sans-serif, system-ui`; ctx.fillText(s,x,y); },
+        text:(s,x,y,size=16)=>{ ctx.fillStyle=getCSSVar('--text', '#e6e8ee'); ctx.font=`${size}px ui-sans-serif, system-ui`; ctx.fillText(s,x,y); },
         circle:(x,y,r,c='#fff')=>{ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); },
         rect:(x,y,w,h,c='#fff')=>{ ctx.fillStyle=c; ctx.fillRect(x,y,w,h); },
         now:()=> performance.now(),
       };
 
-          //React to live theme changes.
-          function startLoop(update){
-  let id; let last = performance.now();
-  const loop = (t)=> {
-    id = requestAnimationFrame(loop);
-    const dt = (t - last) / 1000; last = t;
-    // keep bg in sync if theme changed
-    if (utils._bg !== getCSSVar('--canvas-bg', utils._bg)) {
-      utils._bg = getCSSVar('--canvas-bg', utils._bg);
-    }
-    update(dt);
-  };
-  id = requestAnimationFrame(loop);
-  return ()=> cancelAnimationFrame(id);
-}
-
-      // Provide a simple game loop helper that returns a stop function.
+      //React to live theme changes.
       function startLoop(update){
-        let id; let last=performance.now();
-        function loop(t){ id = requestAnimationFrame(loop); const dt=(t-last)/1000; last=t; update(dt); }
+        let id; let last = performance.now();
+        const loop = (t)=> {
+          id = requestAnimationFrame(loop);
+          const dt = (t - last) / 1000; last = t;
+          // keep bg in sync if theme changed
+          if (utils._bg !== getCSSVar('--canvas-bg', utils._bg)) {
+            utils._bg = getCSSVar('--canvas-bg', utils._bg);
+          }
+          update(dt);
+        };
         id = requestAnimationFrame(loop);
         return ()=> cancelAnimationFrame(id);
       }
@@ -504,10 +514,10 @@ clear() {
       try{
         const fn = new Function('canvas','ctx','utils','startLoop', code+"\n;return typeof startGame==='function'? startGame(canvas, ctx, utils, startLoop) : null;");
         const stop = fn(canvas, ctx, utils, startLoop);
-        CURRENT_STOP = ()=>{ try{ if(stop) stop(); }catch(e){} window.removeEventListener('keydown', onKeyDown); window.removeEventListener('keyup', onKeyUp); };
+        CURRENT_STOP = ()=>{ try{ if(stop) stop(); }catch(e){} };
       } catch(err){
         console.error(err); utils.clear(); utils.text('Error in game code. See console.', 20, 30, 18);
-        CURRENT_STOP = ()=>{ window.removeEventListener('keydown', onKeyDown); window.removeEventListener('keyup', onKeyUp); };
+        CURRENT_STOP = ()=>{};
       }
 
       // store last code for saving/publishing
