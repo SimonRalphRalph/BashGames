@@ -221,8 +221,17 @@ $('#btnExport').onclick = ()=>{
   const code = window.__studioCode || GAME_TEMPLATES.blank;
   const html = buildStandaloneHTML({ title, description, code });
   const safeName = title.replace(/[^a-z0-9-_]+/gi,'_');
+
+  // 1) trigger download
   downloadFile(`${safeName || 'game'}.html`, html);
-  toast('Standalone HTML downloaded');
+
+  // 2) open in a new tab seamlessly
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');  // open standalone game instantly
+  setTimeout(()=>URL.revokeObjectURL(url), 30000); // free memory later
+
+  toast('Standalone HTML opened in a new tab');
 };
 
       // Start with a blank preview
