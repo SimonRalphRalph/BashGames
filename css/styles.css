@@ -303,3 +303,65 @@ html[data-theme="light"] .modal{ background: rgba(0,0,0,.35); }
   .sidebar{ display:none; }
   .search{ width:100%; }
 }
+/* =========================
+   Fix: card overlay & pill
+   ========================= */
+
+/* keep the thumbnail from overlapping the meta row */
+.grid article{
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+/* first child = thumbnail link */
+.grid article > *:first-child{
+  position: relative;
+  display: block;
+  line-height: 0;                /* removes extra line-height around images */
+}
+
+/* the image inside (uses your [data-thumb]) */
+.grid article > *:first-child img,
+.grid article [data-thumb]{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* last child = meta/info row (titles, creator, likes) */
+.grid article > *:last-child{
+  background: var(--panel);
+  position: relative;            /* create stacking context above image */
+  z-index: 1;
+  padding: 14px 16px 16px;
+}
+
+/* title spacing and legibility */
+.grid article [data-title]{
+  display: block;
+  margin: 0 0 4px;
+  line-height: 1.2;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+/* Trending pill readability on vivid thumbnails */
+.grid article [data-pill]{
+  position: absolute;
+  top: 12px; left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  z-index: 2;                    /* above image */
+  background: color-mix(in oklab, var(--panel) 85%, transparent 15%);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent 30%);
+  color: var(--text);
+  opacity: .92;
+}
+
+/* stronger theme-aware backgrounds (fallbacks if color-mix not supported) */
+html[data-theme="dark"] .grid article [data-pill]{ background: rgba(0,0,0,.36); color: #fff; border-color: rgba(255,255,255,.18); }
+html[data-theme="light"] .grid article [data-pill]{ background: rgba(255,255,255,.70); color: var(--text); border-color: rgba(0,0,0,.08); 
+}
