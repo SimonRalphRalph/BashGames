@@ -538,7 +538,7 @@ clear() {
     // ---------- Game Templates (stringified JS) ----------
     const GAME_TEMPLATES = {
       // Blank canvas (for initial state)
-      blank: `function startGame(canvas, ctx, utils, startLoop){\n  utils.clear();\n  utils.text('Describe a game in the box above, then click Generate.', 20, 40, 18);\n  return ()=>{};\n}`,
+      blank: `function startGame(canvas, ctx, utils, startLoop){\n  utils.clear();\n  utils.text('Your game will appear here.', 20, 40, 18);\n  return ()=>{};\n}`,
 
       // Simple bouncing demo
       bouncer: `function startGame(canvas, ctx, utils, startLoop){\n  let x=100,y=100,vx=140,vy=170,r=18;\n  const stop = startLoop(dt=>{\n    utils.clear();\n    x+=vx*dt; y+=vy*dt;\n    if(x<r||x>canvas.width-r) vx*=-1; if(y<r||y>canvas.height-r) vy*=-1;\n    if(utils.keys.has('arrowup')||utils.keys.has('w')){ vy-=10; }\n    if(utils.keys.has('arrowdown')||utils.keys.has('s')){ vy+=10; }\n    if(utils.keys.has('arrowleft')||utils.keys.has('a')){ vx-=10; }\n    if(utils.keys.has('arrowright')||utils.keys.has('d')){ vx+=10; }\n    utils.circle(x,y,r,'#7c5cff');\n    utils.text('Bouncer — press arrow keys', 14, 24, 16);\n  });\n  return ()=> stop();\n}`,
