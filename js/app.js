@@ -209,12 +209,12 @@ function getCSSVar(name, fallback) {
       // Hook up studio actions
       $('#btnClear').onclick = ()=>{ $('#promptText').value=''; runGameCode(GAME_TEMPLATES.blank, $('#studioCanvas')); };
       $('#btnGenerate').onclick = ()=>{
-        if(!getCurrentUser()){ toggleModal('requireModal', true); return; }
-        const prompt = $('#promptText').value.trim();
-        const template = selectTemplate(prompt);
-        runGameCode(template, $('#studioCanvas'));
-        toast('LLM generated game logic ✅ (simulated)');
-      };
+  const prompt = $('#promptText').value.trim();
+  const template = selectTemplate(prompt);
+  runGameCode(template, $('#studioCanvas'));
+  toast('LLM generated game logic ✅ (simulated)');
+};
+      
       $('#btnSave').onclick = ()=>saveGame(false);
       $('#btnPublish').onclick = ()=>saveGame(true);
 
