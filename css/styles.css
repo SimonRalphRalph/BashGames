@@ -163,9 +163,6 @@ header.nav{
 .field{ display:flex; flex-direction:column; gap:6px; }
 .field :is(input, textarea, select){ background:var(--panel); border:1px solid var(--stroke); color:var(--text); padding:10px 12px; border-radius:10px; outline:none; }
 .field :is(input, textarea)::placeholder{ color: color-mix(in oklab, var(--muted) 80%, transparent); }
-
-}
-
 .studio label,
 .studio .field label {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -179,10 +176,43 @@ header.nav{
 .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:14px; }
 .card{ background:var(--panel); border:1px solid var(--stroke); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; transition: transform .08s ease, border-color .15s ease; }
 .card:hover{ transform: translateY(-1px); border-color: color-mix(in oklab, var(--stroke) 70%, var(--brand) 30%); }
-.thumb{ position:relative; background:var(--panel-2); height:130px; display:grid; place-items:center; }
-.thumb .pill{ position:absolute; top:8px; left:8px; background: rgba(20,163,127,.14); border:1px solid rgba(20,163,127,.28); color:#0c3; font-size:12px; padding:4px 8px; border-radius:999px; }
+.thumb{
+  position: relative;
+  background: var(--panel-2);
+  height: 130px;
+  display: grid;
+  place-items: center;
+  line-height: 0;                  /* removes stray inline spacing around the img */
+}
+.thumb .pill{
+  position: absolute;
+  top: 8px; left: 8px;
+  padding: 6px 12px;               /* slightly larger for legibility */
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 2;                      /* ensure it’s above the image */
+  background: rgba(0,0,0,.36);     /* dark-mode default (also a safe fallback) */
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* light theme variant */
+html[data-theme="light"] .thumb .pill{
+  background: rgba(255,255,255,.72);
+  color: var(--text);
+  border-color: rgba(0,0,0,.08);
+}
 .thumb img{ width:100%; height:100%; object-fit:cover; }
-.card .info{ padding:10px; display:grid; gap:8px; }
+.card .info{
+  position: relative;              /* ensure it paints over the thumbnail */
+  z-index: 1;
+  background: var(--panel);        /* solid panel so titles never look “under” the image */
+  padding: 14px 16px 16px;         /* a touch more breathing room */
+  display: grid;
+  gap: 8px;
+  box-shadow: inset 0 1px 0 var(--stroke); /* subtle divider line above the text row */
+}
 .mini{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; }
 
 /* Game page */
