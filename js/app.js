@@ -174,7 +174,7 @@ function getCSSVar(name, fallback) {
       studio.className='studio u-surface';
       studio.innerHTML = `
         <div class="prompt-wrap">
-          <textarea id="promptText" placeholder="Play anything... 'a cozy farming sim with cats'; 'a platformer where gravity flips'."></textarea>
+          <textarea id="promptText" placeholder="Play anything... 'a cozy farming sim with cats'; 'a platformer where gravity flips'..."></textarea>
         </div>
         <div class="prompt-actions">
           <button class="pill-btn brand" id="btnGenerate">✨ Generate Game</button>
