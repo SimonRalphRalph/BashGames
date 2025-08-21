@@ -186,13 +186,11 @@ function getCSSVar(name, fallback) {
             <div class="field"><label>Game Title</label><input id="gameTitle" placeholder="Untitled Game"></div>
             <div class="field"><label>Description</label><textarea id="gameDesc" rows="5" placeholder="What have you created?..."></textarea></div>
             <div class="row" style="gap:8px; flex-wrap:wrap">
-              <button class="btn brand" id="btnSave">Save Draft</button>
-              <button class="btn" id="btnPublish">Publish</button>
-              <span id="saveStatus" style="color:var(--muted)"></span>
-            </div>
-            <small style="color:var(--muted)">Use the arrow keys or WASD to play. A snapshot of your game becomes the thumbnail.</small>
-          </div>
-        </div>
+  <button class="btn brand" id="btnSave">Save Draft</button>
+  <button class="btn" id="btnPublish">Publish</button>
+  <button class="btn" id="btnExport">Export HTML</button>
+  <span id="saveStatus" style="color:var(--muted)"></span>
+</div>
       `;
       view.appendChild(studio);
 
@@ -217,6 +215,15 @@ function getCSSVar(name, fallback) {
       
       $('#btnSave').onclick = ()=>saveGame(false);
       $('#btnPublish').onclick = ()=>saveGame(true);
+$('#btnExport').onclick = ()=>{
+  const title = $('#gameTitle').value.trim() || 'Canvas Game';
+  const description = $('#gameDesc').value.trim() || '';
+  const code = window.__studioCode || GAME_TEMPLATES.blank;
+  const html = buildStandaloneHTML({ title, description, code });
+  const safeName = title.replace(/[^a-z0-9-_]+/gi,'_');
+  downloadFile(`${safeName || 'game'}.html`, html);
+  toast('Standalone HTML downloaded');
+};
 
       // Start with a blank preview
       runGameCode(GAME_TEMPLATES.blank, $('#studioCanvas'));
@@ -277,6 +284,105 @@ function getCSSVar(name, fallback) {
       if(publish){ toast('Published 🎉'); setTimeout(()=> location.hash = `#game?id=${id}`, 400); }
       else toast('Draft saved');
     }
+
+// ---- Export helpers ----
+function downloadFile(filename, content){
+  const blob = new Blob([content], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=> URL.revokeObjectURL(a.href), 0);
+  a.remove();
+}
+
+// Builds a fully standalone, playable HTML file that runs the supplied code.
+// The exported page contains its own tiny runtime (utils + startLoop) and a canvas.
+function buildStandaloneHTML({ title, description, code }){
+  const esc = s => String(s||'').replace(/[&<>\"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+  const safeTitle = esc(title || 'Canvas Game');
+  const safeDesc = esc(description || '');
+  const runtime = `
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${safeTitle}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="${safeDesc}">
+<style>
+  :root{
+    --bg:#0A0B0D; --panel:#0F1114; --text:#ECEDEE; --stroke:rgba(255,255,255,.09);
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font:15px/1.45 Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color:var(--text); background:var(--bg);}
+  header{padding:14px 16px; border-bottom:1px solid var(--stroke); background:var(--panel)}
+  main{max-width:980px; margin:18px auto; padding:0 14px}
+  .wrap{background:var(--panel); border:1px solid var(--stroke); border-radius:12px; padding:12px}
+  canvas{width:100%; height:auto; aspect-ratio:16/10; background:var(--bg); border-radius:10px; border:1px solid rgba(0,0,0,.03)}
+  .mini{opacity:.7}
+</style>
+</head>
+<body>
+<header><strong>${safeTitle}</strong></header>
+<main>
+  <div class="wrap">
+    <canvas id="game" width="900" height="560" aria-label="Game canvas"></canvas>
+    <p class="mini">${safeDesc}</p>
+  </div>
+</main>
+
+<script>
+// Tiny runtime used by the exported game
+(function(){
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+
+  // input
+  const keys = new Set();
+  const onKeyDown = e => keys.add((e.key||'').toLowerCase());
+  const onKeyUp   = e => keys.delete((e.key||'').toLowerCase());
+  window.addEventListener('keydown', onKeyDown);
+  window.addEventListener('keyup', onKeyUp);
+
+  // utils
+  const utils = {
+    width: canvas.width, height: canvas.height,
+    rand:(a,b)=> Math.random()*(b-a)+a,
+    keys,
+    clear(){ ctx.fillStyle = '#0A0B0D'; ctx.fillRect(0,0,canvas.width,canvas.height); },
+    text(s,x,y,size=16){ ctx.fillStyle='#e6e8ee'; ctx.font=\`\${size}px ui-sans-serif, system-ui\`; ctx.fillText(s,x,y); },
+    circle(x,y,r,c='#fff'){ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); },
+    rect(x,y,w,h,c='#fff'){ ctx.fillStyle=c; ctx.fillRect(x,y,w,h); },
+    now:()=> performance.now(),
+  };
+
+  // game loop helper
+  function startLoop(update){
+    let id; let last=performance.now();
+    function loop(t){ id=requestAnimationFrame(loop); const dt=(t-last)/1000; last=t; update(dt); }
+    id=requestAnimationFrame(loop);
+    return ()=> cancelAnimationFrame(id);
+  }
+
+  // user code
+  try {
+    const code = ${JSON.stringify(code)};
+    const fn = new Function('canvas','ctx','utils','startLoop', code + "\\n;return typeof startGame==='function'? startGame(canvas, ctx, utils, startLoop) : null;");
+    const stop = fn(canvas, ctx, utils, startLoop);
+    window.addEventListener('unload', ()=>{ try{ if(stop) stop(); }catch(e){} window.removeEventListener('keydown', onKeyDown); window.removeEventListener('keyup', onKeyUp); });
+  } catch(err){
+    console.error(err);
+    utils.clear(); utils.text('Error in game code. See console.', 20, 30, 18);
+  }
+})();
+</script>
+</body>
+</html>
+`.trim();
+  return runtime;
+}
 
     // ---------- Game Page ----------
     function renderGamePage(id){
